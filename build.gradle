@@ -1,0 +1,72 @@
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "io.qameta.allure.gradle.allure:allure-plugin:2.9.6"
+    }
+}
+
+plugins {
+    id 'java'
+    id 'io.qameta.allure' version '2.12.0' // Allure plugin
+}
+
+group 'one.devs'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'com.microsoft.playwright:playwright:1.39.0'
+    testImplementation 'org.assertj:assertj-core:3.18.1'
+
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit:7.14.0'
+
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.10.0'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.10.0'
+
+    implementation 'com.google.code.gson:gson:2.8.9' // JSON handling for APIs
+
+    testImplementation 'io.qameta.allure:allure-java-commons:2.20.0'
+    testImplementation 'io.qameta.allure:allure-cucumber7-jvm:2.20.0'
+    testImplementation 'io.qameta.allure:allure-junit5:2.13.8'
+    testImplementation 'io.qameta.allure:allure-rest-assured:2.13.8'
+    testImplementation 'io.qameta.allure:allure-attachments:2.13.8'
+    testImplementation 'io.qameta.allure:allure-selenide:2.13.8'
+
+    testImplementation 'io.rest-assured:rest-assured:5.5.0'
+
+    testImplementation 'com.codeborne:selenide:7.6.1'
+    testImplementation 'org.selenide:selenide-selenoid:1.0.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+}
+
+test {
+    systemProperties System.getProperties()
+    useJUnitPlatform() // Enables JUnit5
+}
+
+allure {
+    version = "2.20.0"
+    autoconfigure = true
+    aspectjweaver = true
+}
+
+tasks.register('cucumberTest', JavaExec) {
+    mainClass = "io.cucumber.core.cli.Main"
+    classpath = sourceSets.test.runtimeClasspath
+    args = [
+            '--plugin', 'pretty',
+            '--plugin', 'io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm',
+            '--glue', 'stepdefinitions',
+            'src/test/resources'
+    ]
+}
