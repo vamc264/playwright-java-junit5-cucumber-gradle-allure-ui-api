@@ -154,14 +154,14 @@ tasks.named('test') {
 
 ## Screenshots
 
-### [Overview](screenshots/Screenshot 2024-12-14 at 20.17.08.png)
-![](screenshots/Screenshot 2024-12-14 at 20.17.08.png)
+### [Overview](screenshots/overview.png)
+![](screenshots/overview.png)
 
-### [Features/Suites](screenshots/Screenshot 2024-12-14 at 20.15.53.png)
-![](screenshots/Screenshot 2024-12-14 at 20.15.53.png)
+### [Features/Suites](screenshots/suites.png)
+![](screenshots/suites.png)
 
-### [Graph](screenshots/Screenshot 2024-12-13 at 22.04.36.png)
-![](screenshots/Screenshot 2024-12-13 at 22.04.36.png)
+### [Graph](screenshots/graph.png)
+![](screenshots/graph.png)
 
 
 
