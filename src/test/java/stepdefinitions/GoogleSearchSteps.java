@@ -1,5 +1,6 @@
 package stepdefinitions;
 
+import com.microsoft.playwright.BrowserType;
 import com.microsoft.playwright.Page;
 import utils.PlaywrightManager;
 import io.cucumber.java.en.*;
@@ -7,12 +8,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class GoogleSearchSteps {
     private Page page;
+    private  BrowserType[] browsersToTest = PlaywrightManager.multipleBrowser();
 
     @Given("I open the Google homepage")
     public void iOpenTheGoogleHomepage() {
-        PlaywrightManager.setup();
-        page = PlaywrightManager.getPage();
-        page.navigate("https://www.google.com");
+        for (int i = 0; i < browsersToTest.length; i++) {
+            PlaywrightManager.setup(browsersToTest[i]);
+            page = PlaywrightManager.getPage();
+            page.navigate("https://www.google.com");
+        }
     }
 
     @When("I search for {string}")
@@ -35,5 +39,12 @@ public class GoogleSearchSteps {
         } finally {
             PlaywrightManager.tearDown();
         }
+    }
+
+    @Given("I open the Google homepage in {string}")
+    public void iOpenTheGoogleHomepageInBrowserName(String browserName) {
+        PlaywrightManager.multipleBrowserSetup(browserName);
+        page = PlaywrightManager.getPage();
+        page.navigate("https://www.google.com");
     }
 }
