@@ -9,6 +9,6 @@ Feature: Search for a word on Google
     Then the response contains the key "word" with value "playwright"
     Examples:
       | browserName |
-#      | chrome      |
+      | chrome      |
       | firefox     |
       | webkit      |
