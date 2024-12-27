@@ -2,23 +2,19 @@ package utils;
 
 import com.microsoft.playwright.*;
 import io.qameta.allure.Allure;
+import org.junit.After;
+
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class PlaywrightManager {
     private static Browser browser;
     private static BrowserContext context;
     private static Page page;
 
-    public static void setup(BrowserType browserType) {
-        browser = browserType.launch(new BrowserType.LaunchOptions().setHeadless(false).setSlowMo(100));
-        context = browser.newContext();
-        page = context.newPage();
-        page.waitForTimeout(3000);
-        page.waitForTimeout(3000);
-    }
-
-    public static void multipleBrowserSetup(String browsername){
+    public static void multipleBrowserSetup(String browsername) {
         Playwright playwright = Playwright.create();
         switch (browsername) {
             case "chrome":
@@ -41,15 +37,6 @@ public class PlaywrightManager {
         page.waitForTimeout(3000);
     }
 
-    public static BrowserType[] multipleBrowser(){
-        BrowserType[] browsersToTest = {
-                Playwright.create().chromium(),
-                Playwright.create().firefox(),
-                Playwright.create().webkit()
-        };
-        return browsersToTest;
-    }
-
     public static Page getPage() {
         return page;
     }
@@ -64,7 +51,16 @@ public class PlaywrightManager {
     }
 
     public static void tearDown() {
+        System.out.println("Closing context and browser...");
         context.close();
         browser.close();
+    }
+
+    public static String readFile(String filePath) {
+        try {
+            return Files.readString(Path.of(filePath));
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to read file: " + filePath, e);
+        }
     }
 }

@@ -7,6 +7,8 @@ Feature: Search for a word on Google
     Then I validate that the search results contain "Playwright"
     When I send a GET request to URL
     Then the response contains the key "word" with value "playwright"
+    And the page should pass accessibility checks
+
     Examples:
       | browserName |
       | chrome      |
