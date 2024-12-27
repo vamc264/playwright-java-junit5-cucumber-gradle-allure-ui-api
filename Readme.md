@@ -11,6 +11,7 @@
     * [Install Playwright](#install-playwright)
     * [Setup Gradle:](#setup-gradle)
     * [Configure Allure](#configure-allure)
+    * [Set up Axe-Core for Accessibility Testing](#set-up-axe-core-for-accessibility-testing)
   * [Project Structure](#project-structure)
   * [Gradle Dependencies](#gradle-dependencies)
   * [Allure Reporting](#allure-reporting)
@@ -39,12 +40,14 @@ Ensure you have the following installed:
 4. Git: Version control system.
 5. Node.js: Required for Playwright installation.
 6. Allure Commandline: For generating and displaying reports.
+7. Axe-Core: For accessibility testing.
 
 ### Framework Features
 * Playwright: Handles browser automation and interaction.
 * JUnit5: Test lifecycle management and assertions.
 * Allure Reporting: Generates visual reports for test execution.
 * Gradle: Dependency management and build automation.
+* Axe-Core: Integrates accessibility checks into the Playwright tests.
 
 
 ## Setup Instructions
@@ -65,6 +68,58 @@ Ensure Allure command-line tools are installed on your machine. You can verify i
 If not installed, you can add Allure using Homebrew (macOS) or Scoop (Windows).
 
 `brew install allure` or `scoop install allure`
+
+### Set up Axe-Core for Accessibility Testing
+To integrate Axe-Core into your Playwright tests, follow these steps:
+
+1. Download and Save the `axe.min.js` File Locally
+
+```
+   a. Open your browser and navigate to the CDN URL: https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.7.2/axe.min.js
+
+   b. Right-click and select Save As.
+
+   c. Save the file in your project directory, e.g., src/test/resources/axe.min.js. 
+```
+
+
+2. Add Accessibility Test Helper Class: You can create a helper class to run accessibility tests using Axe-Core. 
+Here's an example of a simple accessibility test:
+
+```
+import com.microsoft.playwright.*;
+import com.deque.axe.Axe;
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+public class AccessibilityTest {
+
+    @Test
+    public void testAccessibility() {
+        Playwright playwright = Playwright.create();
+        Browser browser = playwright.chromium().launch(new BrowserType.LaunchOptions().setHeadless(true));
+        Page page = browser.newPage();
+
+        // Navigate to the website to be tested
+        page.navigate("https://example.com");
+
+        // Run Axe-Core accessibility analysis
+        Axe.Builder axeBuilder = new Axe.Builder(page);
+        var results = axeBuilder.analyze();
+
+        // Assert no violations
+        assertTrue(results.getViolations().isEmpty(), "Accessibility violations found: " + results.getViolations());
+
+        browser.close();
+    }
+}
+```
+3. Run Accessibility Tests: Use the standard Gradle test command to run accessibility tests along with other Playwright tests: 
+
+`./gradlew clean cucumberTest allureReport allureServe`
+
+Any accessibility violations will be outputted in the test report, and you can inspect them to ensure compliance with WCAG standards.
+
 
 ## Project Structure
 

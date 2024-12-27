@@ -11,6 +11,6 @@ Feature: Search for a word on Google
 
     Examples:
       | browserName |
+      | firefox      |
       | chrome      |
-      | firefox     |
       | webkit      |
